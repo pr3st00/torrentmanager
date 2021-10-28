@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Torrent Manager</title>
+
+    <style>
+        th.dt-center,
+        td.dt-center {
+            text-align: center;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="javascripts/common.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#ajax_image').hide();
+
+            $('#torrent_table').DataTable({
+                ajax: {
+                    url: '/search/' + GetUrlParameter("q"),
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'name' },
+                    { data: 'source' },
+                    { data: 'leechers' },
+                    { data: 'seeders' },
+                    { data: 'files' },
+                    { data: 'hash' },
+                ],
+                columnDefs: [
+                    {
+                        "targets": [1, 2, 3, 4],
+                        "className": 'dt-center'
+                    },
+                    {
+                        "targets": 5,
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            let magnetUrl = "/viewTorrent.html?q=" + GetUrlParameter("q") + "&hash=" + rowData.hash;
+
+                            let delugeElement = "<a href='' onclick=\"javascript:sendToDeluge('" + rowData.hash + "','" + rowData.name + "'); return false;\"><img src='/images/deluge.png' width='20' height='20' /></a>";
+                            let magnetElement = "<a href='' onclick=\"javascript:openWindow('" + magnetUrl + "'); return false;\"><img src='/images/icon-magnet.gif' width='17' height='17' /></a>";
+
+                            $(td).html("<center>" + delugeElement + magnetElement + "</center>");
+                        }
+                    }]
+            });
+        });
+
+        function GetUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1);
+
+            var sURLVariables = sPageURL.split('&');
+
+            for (var i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] == sParam) {
+                    return sParameterName[1];
+                }
+            }
+        }
+
+        function openWindow(url) {
+            let strWindowFeatures = "menubar=no,location=no,resizable=no,scrollbars=no,status=no,resizable=no,height=200,width=520,top=100,left=500";
+
+            var w = window.open(url, '_blank', strWindowFeatures);
+
+            return false;
+        }
+
+        function sendToDeluge(hash, name) {
+
+            let delugeUrl = '/addToDeluge/' + hash + '/' + name;
+
+            $.ajax({
+                url: delugeUrl,
+                timeout: 10000,
+                beforeSend: function (xhr) {
+                    $('#ajax_image').show(); 
+                }
+            })
+                .done(function (data) {
+                    $('#ajax_image').hide();
+
+                    console.debug(`Response from deluge is ${data}`);
+
+                    if (data && data[0]) {
+                        alert("Added to Deluge for downloading...");
+                    } else {
+                        alert(`Something went wrong. Response from Deluge is [${data}]`);
+                    }
+                })
+                .fail(function () {
+                    $('#ajax_image').hide();
+                    alert(`Timeout occurred.`);
+                });
+        }
+
+    </script>
+</head>
+
+<body>
+    <div>
+        <center>
+            <img src="/images/ajax.gif" name="ajax_image" id="ajax_image"/>
+        </center>
+        
+        <table id="torrent_table" class="display">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Source</th>
+                    <th>Leechers</th>
+                    <th>Seeders</th>
+                    <th># Files</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Torrent Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="javascripts/common.js"></script>
+
+    <style>
+        .torrent-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                url: '/search/' + GetUrlParameter("q") + '/' + GetUrlParameter("hash"),
+            }).done(function (data) {
+                $('#name').html(data[0].name);
+                $('#url').html('<a href="' + data[0].magnetUrl + '"> <img src="/images/icon-magnet.gif" width="17" height="17" /> </a>');
+            });;
+
+        });
+
+    </script>
+</head>
+
+<body>
+    <div>
+        <table class="torrent-table">
+            <thead>
+                <th>Name</th>
+                <th>Magnet Url</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p id="name"></p>
+                    </td>
+                    <td>
+                        <p id="url"></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
