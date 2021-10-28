@@ -14,6 +14,13 @@ router.get('/:hash/:name', function (req, res, next) {
   sendResponse(req.params.hash, req.params.name, res);
 });
 
+/**
+ * Adds the magnet url determined by hash and name to deluge. Runs the deluge connection logic, if necessary.
+ * 
+ * @param {*} hash 
+ * @param {*} name 
+ * @param {*} res 
+ */
 function sendResponse(hash, name, res) {
 
   deluge.IsDelugeConnected()
