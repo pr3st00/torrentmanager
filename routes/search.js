@@ -26,9 +26,8 @@ function sendResponse(query, hash, res) {
 
     let data = {};
 
-    console.log("Restricting data to hash ", hash);
-
     if (hash) {
+      console.log("Restricting data to hash ", hash);
       data = response.data.filter((x) => x.info_hash === hash);
     }
     else {
