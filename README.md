@@ -25,9 +25,9 @@ and the default download folder of "/downloads"
 
 Those values can be customized by setting environment variables as shown below:
 
-export DELUGE_URL="http://<delugeHost>:8112/json"
-export DELUGE_PASS="<delugePass>"
-export DOWNLOAD_PATH="<downloadDir>"
+export DELUGE_URL="http://<delugeHost>:8112/json"   
+export DELUGE_PASS="<delugePass>"   
+export DOWNLOAD_PATH="<downloadDir>"   
 
 In case you're building a docker container, the docker.sh script will pass those variables to the running container as well.
 
