@@ -3,7 +3,6 @@ const router = express.Router();
 const piratebay = require('../lib/retrievers/piratebay');
 const eztv = require('../lib/retrievers/eztv');
 
-
 router.get('/', function (req, res, next) {
   sendResponse(req.query.query, req.query.hash, res);
 });

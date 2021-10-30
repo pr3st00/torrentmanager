@@ -19,8 +19,21 @@ Screenshots:
 
 ![Deluge downloading](https://i.imgur.com/KX2DmNp.png "Deluge downloading")
 
+## Configuration
+By default the interface will try to connect to a deluge instance running on localhost with the default password of "deluge"
+and the default download folder of "/downloads"
+
+Those values can be customized by setting environment variables as shown below:
+
+export DELUGE_URL="http://<delugeHost>:8112/json"
+export DELUGE_PASS="<delugePass>"
+export DOWNLOAD_PATH="<downloadDir>"
+
+In case you're building a docker container, the docker.sh script will pass those variables to the running container as well.
+
 ## Sources currently supported
 1. The pirate bay
+2. EZTV
 
 ## Current Feature Requests/Suggestions
 Pending..
